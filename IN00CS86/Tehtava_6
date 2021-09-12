@@ -1,0 +1,182 @@
+### IN00CS86 Internet-ohjelmointi ja tietokannat ###
+### 6: Employees osa 2 ###
+
+a) Tulosta kymmenen aakkosjärjestyksessä ensimmäisen työntekijän tiedot sukunimen mukaan lajiteltuna. Vihje: LIMIT rajoittaa tulostettavien tietojen määrän.
+
+mysql> show tables;
++----------------------+
+| Tables_in_employees  |
++----------------------+
+| current_dept_emp     |
+| departments          |
+| dept_emp             |
+| dept_emp_latest_date |
+| dept_manager         |
+| employees            |
+| salaries             |
+| titles               |
++----------------------+
+8 rows in set (0,00 sec)
+
+mysql> desc employees;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| emp_no     | int           | NO   | PRI | NULL    |       |
+| birth_date | date          | NO   |     | NULL    |       |
+| first_name | varchar(14)   | NO   |     | NULL    |       |
+| last_name  | varchar(16)   | NO   |     | NULL    |       |
+| gender     | enum('M','F') | NO   |     | NULL    |       |
+| hire_date  | date          | NO   |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+6 rows in set (0,00 sec)
+
+mysql> select * from employees order by last_name limit 10;
++--------+------------+------------+-----------+--------+------------+
+| emp_no | birth_date | first_name | last_name | gender | hire_date  |
++--------+------------+------------+-----------+--------+------------+
+|  11761 | 1964-07-17 | Bartek     | Aamodt    | M      | 1991-06-12 |
+|  15427 | 1959-03-06 | Aluzio     | Aamodt    | M      | 1985-03-03 |
+|  18182 | 1963-02-23 | Dekang     | Aamodt    | F      | 1988-05-25 |
+|  16572 | 1956-11-26 | Matt       | Aamodt    | M      | 1987-06-16 |
+|  12791 | 1960-06-16 | Mokhtar    | Aamodt    | M      | 1994-08-14 |
+|  12516 | 1958-06-25 | Sreenivas  | Aamodt    | F      | 1990-03-06 |
+|  12982 | 1952-12-08 | Sachem     | Aamodt    | F      | 1992-01-11 |
+|  17400 | 1962-03-22 | Basim      | Aamodt    | F      | 1991-09-15 |
+|  19898 | 1957-03-09 | Vidar      | Aamodt    | M      | 1988-08-06 |
+|  17885 | 1954-02-01 | Takanari   | Aamodt    | M      | 1996-08-19 |
++--------+------------+------------+-----------+--------+------------+
+10 rows in set (0,19 sec)
+
+
+b) Sama kuten edellä, mutta sukunimen JA etunimen mukaan lajiteltuna.
+
+mysql> select * from employees order by last_name limit 10;
++--------+------------+------------+-----------+--------+------------+
+| emp_no | birth_date | first_name | last_name | gender | hire_date  |
++--------+------------+------------+-----------+--------+------------+
+|  11761 | 1964-07-17 | Bartek     | Aamodt    | M      | 1991-06-12 |
+|  15427 | 1959-03-06 | Aluzio     | Aamodt    | M      | 1985-03-03 |
+|  18182 | 1963-02-23 | Dekang     | Aamodt    | F      | 1988-05-25 |
+|  16572 | 1956-11-26 | Matt       | Aamodt    | M      | 1987-06-16 |
+|  12791 | 1960-06-16 | Mokhtar    | Aamodt    | M      | 1994-08-14 |
+|  12516 | 1958-06-25 | Sreenivas  | Aamodt    | F      | 1990-03-06 |
+|  12982 | 1952-12-08 | Sachem     | Aamodt    | F      | 1992-01-11 |
+|  17400 | 1962-03-22 | Basim      | Aamodt    | F      | 1991-09-15 |
+|  19898 | 1957-03-09 | Vidar      | Aamodt    | M      | 1988-08-06 |
+|  17885 | 1954-02-01 | Takanari   | Aamodt    | M      | 1996-08-19 |
++--------+------------+------------+-----------+--------+------------+
+10 rows in set (0,19 sec)
+
+
+c) Tulosta viiden viimeksi palkatun työntekijän tiedot.
+
+mysql> select * from employees order by hire_date desc limit 5;
++--------+------------+------------+-----------+--------+------------+
+| emp_no | birth_date | first_name | last_name | gender | hire_date  |
++--------+------------+------------+-----------+--------+------------+
+| 463807 | 1964-06-12 | Bikash     | Covnot    | M      | 2000-01-28 |
+| 428377 | 1957-05-09 | Yucai      | Gerlach   | M      | 2000-01-23 |
+| 499553 | 1954-05-06 | Hideyuki   | Delgrande | F      | 2000-01-22 |
+| 222965 | 1959-08-07 | Volkmar    | Perko     | F      | 2000-01-13 |
+|  47291 | 1960-09-09 | Ulf        | Flexer    | M      | 2000-01-12 |
++--------+------------+------------+-----------+--------+------------+
+5 rows in set (0,16 sec)
+
+
+d) Kenellä on suurin palkka ?
+
+mysql> desc salaries;
++-----------+------+------+-----+---------+-------+
+| Field     | Type | Null | Key | Default | Extra |
++-----------+------+------+-----+---------+-------+
+| emp_no    | int  | NO   | PRI | NULL    |       |
+| salary    | int  | NO   |     | NULL    |       |
+| from_date | date | NO   | PRI | NULL    |       |
+| to_date   | date | NO   |     | NULL    |       |
++-----------+------+------+-----+---------+-------+
+4 rows in set (0,00 sec)
+
+mysql> select first_name, last_name from employees join salaries on employees.emp_no = salaries.emp_no order by salary desc limit 1;
++------------+-----------+
+| first_name | last_name |
++------------+-----------+
+| Tokuyasu   | Pesch     |
++------------+-----------+
+1 row in set (1,71 sec)
+
+
+e) Kenellä on pienin palkka?
+
+mysql> select first_name, last_name from employees join salaries on employees.emp_no = salaries.emp_no order by salary desc limit 1;
++------------+-----------+
+| first_name | last_name |
++------------+-----------+
+| Tokuyasu   | Pesch     |
++------------+-----------+
+1 row in set (1,71 sec)
+
+
+f) Tulosta työntekijät, jotka ansaitsevat yli 150000.
+
+mysql> select first_name, last_name from employees join salaries on employees.emp_no = salaries.emp_no order by salary desc limit 1;
++------------+-----------+
+| first_name | last_name |
++------------+-----------+
+| Tokuyasu   | Pesch     |
++------------+-----------+
+1 row in set (1,71 sec)
+
+
+g) Kuinka monta työntekijää työskentelee myynnissä (Sales) ? Entä markkinoinnissa (Marketing) ?
+
+mysql> desc departments;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| dept_no   | char(4)     | NO   | PRI | NULL    |       |
+| dept_name | varchar(40) | NO   | UNI | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0,01 sec)
+
+mysql> desc dept_emp;
++-----------+---------+------+-----+---------+-------+
+| Field     | Type    | Null | Key | Default | Extra |
++-----------+---------+------+-----+---------+-------+
+| emp_no    | int     | NO   | PRI | NULL    |       |
+| dept_no   | char(4) | NO   | PRI | NULL    |       |
+| from_date | date    | NO   |     | NULL    |       |
+| to_date   | date    | NO   |     | NULL    |       |
++-----------+---------+------+-----+---------+-------+
+4 rows in set (0,01 sec)
+
+mysql> select * from departments;
++---------+--------------------+
+| dept_no | dept_name          |
++---------+--------------------+
+| d009    | Customer Service   |
+| d005    | Development        |
+| d002    | Finance            |
+| d003    | Human Resources    |
+| d001    | Marketing          |
+| d004    | Production         |
+| d006    | Quality Management |
+| d008    | Research           |
+| d007    | Sales              |
++---------+--------------------+
+9 rows in set (0,00 sec)
+
+mysql> select dept_name, count(*) as Employees from departments join dept_emp on departments.dept_no=dept_emp.dept_no join employees on employees.emp_no=dept_emp.emp_no where dept_name = 'Sales' or dept_name = 'Marketing' group by dept_name;
++-----------+-----------+
+| dept_name | Employees |
++-----------+-----------+
+| Marketing |     20211 |
+| Sales     |     52245 |
++-----------+-----------+
+2 rows in set (0,14 sec)
+
+h) Tulosta kaikkien osastonjohtajien (Department Managers) etunimi, sukunimi ja osasto, jolla työskentelee.
+
+
+
+i) Mikä on myynnissä työskentelevien keskipalkka ? Entä markkinoinnissa ?
