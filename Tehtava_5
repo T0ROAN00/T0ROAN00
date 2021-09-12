@@ -1,3 +1,4 @@
+### IN00CS86 Internet-ohjelmointi ja tietokannat ###
 ### 5: Pet ja owner ###
 
 mysql> create table owner (first_name varchar(255), last_name varchar(255), address varchar(255), ownerID int primary key auto_increment);
