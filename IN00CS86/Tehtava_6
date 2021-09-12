@@ -177,6 +177,36 @@ mysql> select dept_name, count(*) as Employees from departments join dept_emp on
 
 h) Tulosta kaikkien osastonjohtajien (Department Managers) etunimi, sukunimi ja osasto, jolla työskentelee.
 
-
+mysql> select first_name, last_name, dept_name from employees join dept_emp on employees.emp_no=dept_emp.emp_no join departments on dept_emp.dept_no=departments.dept_no join dept_manager on employees.emp_no = dept_manager.emp_no
+join titles on employees.emp_no = titles.emp_no where title = 'Manager';
++-------------+--------------+--------------------+
+| first_name  | last_name    | dept_name          |
++-------------+--------------+--------------------+
+| Margareta   | Markovitch   | Marketing          |
+| Vishwani    | Minakawa     | Marketing          |
+| Ebru        | Alpin        | Finance            |
+| Isamu       | Legleitner   | Finance            |
+| Shirish     | Ossenbruggen | Human Resources    |
+| Karsten     | Sigstam      | Human Resources    |
+| Krassimir   | Wegerle      | Production         |
+| Rosine      | Cools        | Production         |
+| Shem        | Kieras       | Production         |
+| Oscar       | Ghazalie     | Production         |
+| DeForest    | Hagimont     | Development        |
+| Leon        | DasSarma     | Development        |
+| Peternela   | Onuegbe      | Quality Management |
+| Rutger      | Hofmeyr      | Quality Management |
+| Sanjoy      | Quadeer      | Quality Management |
+| Dung        | Pesch        | Quality Management |
+| Przemyslawa | Kaelbling    | Sales              |
+| Hauke       | Zhang        | Sales              |
+| Arie        | Staelin      | Research           |
+| Hilary      | Kambil       | Research           |
+| Tonny       | Butterworth  | Customer Service   |
+| Marjo       | Giarratana   | Customer Service   |
+| Xiaobin     | Spinelli     | Customer Service   |
+| Yuchang     | Weedman      | Customer Service   |
++-------------+--------------+--------------------+
+24 rows in set (0,00 sec)
 
 i) Mikä on myynnissä työskentelevien keskipalkka ? Entä markkinoinnissa ?
