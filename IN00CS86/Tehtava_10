@@ -1,0 +1,86 @@
+### Kyselyjä arviointitietokannasta ###
+
+1) Tulosta kaikki opiskelijat, joilla on tietokannassa hylätty arvosana
+
+mysql> select Etunimi,Sukunimi,Arvosana,Paivamaara,Nimi from Arviointi JOIN Opiskelija on Opiskelija.idOpiskelija = Arviointi.idOpiskelija JOIN Opintojakso on Opintojakso.idOpintojakso = Arviointi.idOpintojakso where Arvosana = '0';
++------------+----------+----------+------------+-----------------------+
+| Etunimi    | Sukunimi | Arvosana | Paivamaara | Nimi                  |
++------------+----------+----------+------------+-----------------------+
+| Iines      | Ankka    |        0 | 2021-05-20 | Kurkkulaulanta, jatko |
+| Mummo      | Ankka    |        0 | 2021-12-20 | Tietokantahimmelit    |
+| Kivisyommi | Karhula  |        0 | 2021-11-01 | Alkemia               |
++------------+----------+----------+------------+-----------------------+
+3 rows in set (0,00 sec)
+
+
+2) Tulosta kaikki kurssia X hyväksytysti suorittaneet
+
+mysql> select Etunimi,Sukunimi,Arvosana,Paivamaara,Nimi from Arviointi JOIN Opiskelija on Opiskelija.idOpiskelija = Arviointi.idOpiskelija JOIN Opintojakso on Opintojakso.idOpintojakso = Arviointi.idOpintojakso where Nimi = 'Alkemia' and Arvosana != 0;
++---------+----------+----------+------------+---------+
+| Etunimi | Sukunimi | Arvosana | Paivamaara | Nimi    |
++---------+----------+----------+------------+---------+
+| Iines   | Ankka    |        1 | 2021-05-10 | Alkemia |
+| Mummo   | Ankka    |        5 | 2021-07-01 | Alkemia |
++---------+----------+----------+------------+---------+
+2 rows in set (0,00 sec)
+
+
+3) Mille kursseille Hessu on osallistunut ?
+
+mysql> select Etunimi,Sukunimi,Arvosana,Paivamaara,Nimi from Arviointi JOIN Opiskelija on Opiskelija.idOpiskelija = Arviointi.idOpiskelija JOIN Opintojakso on Opintojakso.idOpintojakso = Arviointi.idOpintojakso where Etunimi = 'Hessu';
++---------+----------+----------+------------+------------------------+
+| Etunimi | Sukunimi | Arvosana | Paivamaara | Nimi                   |
++---------+----------+----------+------------+------------------------+
+| Hessu   | Hopo     |        5 | 2021-08-10 | Ompelukoneen ajokortti |
+| Hessu   | Hopo     |        1 | 2021-08-28 | Taukojumppa            |
++---------+----------+----------+------------+------------------------+
+2 rows in set (0,01 sec)
+
+4) Mikä on Akun opintosuoritusten keskiarvo ?
+
+mysql> select avg(Arvosana) as Keskiarvo from Arviointi JOIN Opiskelija on Opiskelija.idOpiskelija = Arviointi.idOpiskelija JOIN Opintojakso on Opintojakso.idOpintojakso = Arviointi.idOpintojakso where Etunimi = 'Aku';
++-----------+
+| Keskiarvo |
++-----------+
+|    3.0000 |
++-----------+
+1 row in set (0,00 sec)
+
+
+5) Millä opintojaksoilla ei ole yhtään suoritusmerkintää ? (Vihje: Tarvitset tässä left tai right joinia...)
+Tällä haulla tulee kaikki tietueet, seuraavalla se mitä pyydetään
+
+mysql> select Etunimi,Sukunimi,Arvosana,Paivamaara,Nimi from Arviointi JOIN Opiskelija on Opiskelija.idOpiskelija = Arviointi.idOpiskelija right JOIN Opintojakso on Opintojakso.idOpintojakso = Arviointi.idOpintojakso;
++------------+----------+----------+------------+----------------------------------------+
+| Etunimi    | Sukunimi | Arvosana | Paivamaara | Nimi                                   |
++------------+----------+----------+------------+----------------------------------------+
+| Aku        | Ankka    |        2 | 2021-07-12 | Tietokantahimmelit                     |
+| Pelle      | Peloton  |        4 | 2021-03-15 | Tietokantahimmelit                     |
+| Mummo      | Ankka    |        0 | 2021-12-20 | Tietokantahimmelit                     |
+| Kivisyommi | Karhula  |        1 | 2021-03-20 | Liike-elaman kummajaiset               |
+| Hessu      | Hopo     |        1 | 2021-08-28 | Taukojumppa                            |
+| Pelle      | Peloton  |        3 | 2021-01-12 | Taukojumppa                            |
+| Aku        | Ankka    |        4 | 2021-07-12 | Elektroniikkaa, sinisen savun merkitys |
+| Pelle      | Peloton  |        3 | 2021-10-10 | Elektroniikkaa, sinisen savun merkitys |
+| Kivisyommi | Karhula  |        4 | 2021-03-20 | Elektroniikkaa, sinisen savun merkitys |
+| Iines      | Ankka    |        4 | 2021-05-10 | Kurkkulaulannan perusteet              |
+| Mummo      | Ankka    |        5 | 2021-06-29 | Kurkkulaulanta, jatko                  |
+| Iines      | Ankka    |        0 | 2021-05-20 | Kurkkulaulanta, jatko                  |
+| Iines      | Ankka    |        1 | 2021-05-10 | Alkemia                                |
+| Mummo      | Ankka    |        5 | 2021-07-01 | Alkemia                                |
+| Kivisyommi | Karhula  |        0 | 2021-11-01 | Alkemia                                |
+| Hessu      | Hopo     |        5 | 2021-08-10 | Ompelukoneen ajokortti                 |
+| NULL       | NULL     |     NULL | NULL       | Opi tekemaan etatoita                  |
+| NULL       | NULL     |     NULL | NULL       | Puujalkavitsien hallinta               |
++------------+----------+----------+------------+----------------------------------------+
+18 rows in set (0,00 sec)
+
+
+mysql> select Nimi from Arviointi JOIN Opiskelija on Opiskelija.idOpiskelija = Arviointi.idOpiskelija right JOIN Opintojakso on Opintojakso.idOpintojakso = Arviointi.idOpintojakso where Paivamaara is null;
++--------------------------+
+| Nimi                     |
++--------------------------+
+| Opi tekemaan etatoita    |
+| Puujalkavitsien hallinta |
++--------------------------+
+2 rows in set (0,00 sec)
