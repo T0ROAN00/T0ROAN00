@@ -1,0 +1,103 @@
+### Arviointitietokannan luonti ###
+
+## Luodaan taulut Opiskelija ja Opintojakso
+
+mysql> create table Opiskelija (
+    -> idOpiskelija int not null primary key auto_increment,
+    -> Etunimi varchar(45),
+    -> Sukunimi varchar(45),
+    -> Osoite varchar(45),
+    -> Luokkatunnus varchar(45)
+    -> );
+Query OK, 0 rows affected (0,02 sec)
+
+mysql> desc Opiskelija;
++--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
++--------------+-------------+------+-----+---------+----------------+
+| idOpiskelija | int         | NO   | PRI | NULL    | auto_increment |
+| Etunimi      | varchar(45) | YES  |     | NULL    |                |
+| Sukunimi     | varchar(45) | YES  |     | NULL    |                |
+| Osoite       | varchar(45) | YES  |     | NULL    |                |
+| Luokkatunnus | varchar(45) | YES  |     | NULL    |                |
++--------------+-------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
+
+mysql> create table Opintojakso ( idOpintojakso int not null primary key auto_increment, Koodi varchar(45), Laajuus TINYINT, Nimi varchar(45) );
+Query OK, 0 rows affected (0,02 sec)
+
+mysql> desc Opintojakso;
++---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
++---------------+-------------+------+-----+---------+----------------+
+| idOpintojakso | int         | NO   | PRI | NULL    | auto_increment |
+| Koodi         | varchar(45) | YES  |     | NULL    |                |
+| Laajuus       | tinyint     | YES  |     | NULL    |                |
+| Nimi          | varchar(45) | YES  |     | NULL    |                |
++---------------+-------------+------+-----+---------+----------------+
+4 rows in set (0,01 sec)
+
+## Luodaan taulujen Opiskelija ja Opintojakso välille yhteys taululla Arviointi
+
+mysql> create table Arviointi (
+    -> idArviointi int not null primary key auto_increment,
+    -> Paivamaara DATE,
+    -> Arvosana TINYINT,
+    -> idOpiskelija int not null,
+    -> idOpintojakso int not null,
+    -> foreign key (idOpiskelija) references Opiskelija(idOpiskelija),
+    -> foreign key (idOpintojakso) references Opintojakso(idOpintojakso)
+    -> );
+Query OK, 0 rows affected (0,02 sec)
+
+mysql> desc Arviointi;
++---------------+---------+------+-----+---------+----------------+
+| Field         | Type    | Null | Key | Default | Extra          |
++---------------+---------+------+-----+---------+----------------+
+| idArviointi   | int     | NO   | PRI | NULL    | auto_increment |
+| Paivamaara    | date    | YES  |     | NULL    |                |
+| Arvosana      | tinyint | YES  |     | NULL    |                |
+| idOpiskelija  | int     | NO   | MUL | NULL    |                |
+| idOpintojakso | int     | NO   | MUL | NULL    |                |
++---------------+---------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
+
+## Syötetään tauluihin tietoja
+
+mysql> insert into Opiskelija values (NULL,'Kivisyommi','Karhula','Tiilepaa 186','ATK100F');
+Query OK, 1 row affected (0,00 sec)
+
+mysql> select * from Opiskelija;
++--------------+------------+----------+--------------------+--------------+
+| idOpiskelija | Etunimi    | Sukunimi | Osoite             | Luokkatunnus |
++--------------+------------+----------+--------------------+--------------+
+|            1 | Aku        | Ankka    | Paratiisitie 13    | ATK100A      |
+|            2 | Iines      | Ankka    | Ankkalinnantie 131 | ATK100B      |
+|            3 | Hessu      | Hopo     | Kurjenmutka 30     | ATK100C      |
+|            4 | Mummo      | Ankka    | Ankantila 305      | ATK100D      |
+|            5 | Pelle      | Peloton  | Atomikuja 5        | ATK100E      |
+|            6 | Kivisyommi | Karhula  | Tiilepaa 186       | ATK100F      |
++--------------+------------+----------+--------------------+--------------+
+6 rows in set (0,00 sec)
+
+mysql> insert into Opintojakso values (NULL,'A2021H','2','Ompelukoneen ajokortti');
+Query OK, 1 row affected (0,01 sec)
+
+mysql> select * from Opintojakso;
++---------------+--------+---------+----------------------------------------+
+| idOpintojakso | Koodi  | Laajuus | Nimi                                   |
++---------------+--------+---------+----------------------------------------+
+|             1 | A2021A |       3 | Tietokantahimmelit                     |
+|             2 | A2021B |       4 | Liike-elaman kummajaiset               |
+|             3 | A2021C |       1 | Taukojumppa                            |
+|             4 | A2021D |      10 | Elektroniikkaa, sinisen savun merkitys |
+|             5 | A2021E |       5 | Kurkkulaulannan perusteet              |
+|             6 | A2021F |       5 | Kurkkulaulanta, jatko                  |
+|             7 | A2021G |       6 | Alkemia                                |
+|             8 | A2021H |       2 | Ompelukoneen ajokortti                 |
++---------------+--------+---------+----------------------------------------+
+8 rows in set (0,00 sec)
+
+
+
+
