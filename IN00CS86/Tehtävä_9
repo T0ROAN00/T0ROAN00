@@ -98,6 +98,54 @@ mysql> select * from Opintojakso;
 +---------------+--------+---------+----------------------------------------+
 8 rows in set (0,00 sec)
 
+## Syötetään kullekin opiskelijalle tietoja kurssien arvosanoista
 
+mysql> insert into Arviointi values (NULL,'2021-03-20',4,6,4);
+Query OK, 1 row affected (0,00 sec)
+
+mysql> insert into Arviointi values (NULL,'2021-03-20',1,6,2);
+Query OK, 1 row affected (0,00 sec)
+
+mysql> select * from Arviointi;
++-------------+------------+----------+--------------+---------------+
+| idArviointi | Paivamaara | Arvosana | idOpiskelija | idOpintojakso |
++-------------+------------+----------+--------------+---------------+
+|           1 | 2021-07-12 |        2 |            1 |             1 |
+|           2 | 2021-07-12 |        4 |            1 |             4 |
+|           3 | 2021-05-10 |        4 |            2 |             5 |
+|           4 | 2021-05-10 |        1 |            2 |             7 |
+|           5 | 2021-08-10 |        5 |            3 |             8 |
+|           6 | 2021-08-28 |        1 |            3 |             3 |
+|           7 | 2021-07-01 |        5 |            4 |             7 |
+|           8 | 2021-06-29 |        5 |            4 |             6 |
+|           9 | 2021-10-10 |        3 |            5 |             4 |
+|          10 | 2021-01-12 |        3 |            5 |             3 |
+|          11 | 2021-03-15 |        4 |            5 |             1 |
+|          12 | 2021-03-20 |        4 |            6 |             4 |
+|          13 | 2021-03-20 |        1 |            6 |             2 |
++-------------+------------+----------+--------------+---------------+
+13 rows in set (0,00 sec)
+
+## Haetaan tiedot yhteen
+
+mysql> select Etunimi,Sukunimi,Arvosana,Paivamaara,Nimi from Arviointi JOIN Opiskelija on Opiskelija.idOpiskelija = Arviointi.idOpiskelija JOIN Opintojakso on Opintojakso.idOpintojakso = Arviointi.idOpintojakso;
++------------+----------+----------+------------+----------------------------------------+
+| Etunimi    | Sukunimi | Arvosana | Paivamaara | Nimi                                   |
++------------+----------+----------+------------+----------------------------------------+
+| Aku        | Ankka    |        2 | 2021-07-12 | Tietokantahimmelit                     |
+| Aku        | Ankka    |        4 | 2021-07-12 | Elektroniikkaa, sinisen savun merkitys |
+| Iines      | Ankka    |        4 | 2021-05-10 | Kurkkulaulannan perusteet              |
+| Iines      | Ankka    |        1 | 2021-05-10 | Alkemia                                |
+| Hessu      | Hopo     |        5 | 2021-08-10 | Ompelukoneen ajokortti                 |
+| Hessu      | Hopo     |        1 | 2021-08-28 | Taukojumppa                            |
+| Mummo      | Ankka    |        5 | 2021-07-01 | Alkemia                                |
+| Mummo      | Ankka    |        5 | 2021-06-29 | Kurkkulaulanta, jatko                  |
+| Pelle      | Peloton  |        3 | 2021-10-10 | Elektroniikkaa, sinisen savun merkitys |
+| Pelle      | Peloton  |        3 | 2021-01-12 | Taukojumppa                            |
+| Pelle      | Peloton  |        4 | 2021-03-15 | Tietokantahimmelit                     |
+| Kivisyommi | Karhula  |        4 | 2021-03-20 | Elektroniikkaa, sinisen savun merkitys |
+| Kivisyommi | Karhula  |        1 | 2021-03-20 | Liike-elaman kummajaiset               |
++------------+----------+----------+------------+----------------------------------------+
+13 rows in set (0,00 sec)
 
 
